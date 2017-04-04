@@ -1,15 +1,13 @@
 import pandas as pd
 import numpy as np
 
-def get_data(clean = True, minNumRatings = 10):
+def get_data(clean = True):
 	""" Load in data, and then optionally clean it.
 
 	Parameters:
 	-----------
 	clean : boolean (optional)
 		whether to clean the data or not.
-	minNumRatings : int (optional)
-		minimum number of anime a user must have rated to not be removed.
 
 	Returns:
 	--------
@@ -32,13 +30,29 @@ def get_data(clean = True, minNumRatings = 10):
 	bad_ids = anime.anime_id[(anime.type != 'TV') | (anime.rating.isnull())]
 	users.drop(users[users.anime_id.map(lambda x: x in bad_ids)].index, inplace=True)
 	anime.drop(anime[(anime.type != 'TV') | (anime.rating.isnull())].index, inplace=True)
+	return users, anime
+
+def remove_users(users, minNumRatings = 10):
+
+	""" Remove users with fewer ratings than minNumRatings.
+
+	Parameters:
+	-----------
+	users: the dataframe corresponding to user/anime pairs (and the rating given)
+	minNumRatings : 
+		minimum number of anime a user must have rated to not be removed.
+
+	Returns:
+	--------
+	users : Pandas dataframe 
+		the dataframe corresponding to user/anime pairs (and the rating given)
+	"""
 
 	#Remove users with fewer than minNumRatings views
 	vc = users.user_id.value_counts()
 	low_ratings = vc[vc.map(lambda x: x < minNumRatings)].index
 	users.drop(users[users.user_id.map(lambda x: x in low_ratings)].index, inplace=True)
 
-	return users, anime
-
+	return users
 
 
