@@ -19,7 +19,6 @@ def get_data(clean = True):
 
 	users = pd.read_csv('rating.csv')
 	anime = pd.read_csv('anime.csv')
-
 	if not clean:
 		return users, anime
 
@@ -27,7 +26,8 @@ def get_data(clean = True):
 	users.drop(users[users.rating == -1].index, inplace=True)
 
 	#Remove non-TV anime, as well as anime with a rating of NaN
-	bad_ids = anime.anime_id[(anime.type != 'TV') | (anime.rating.isnull())]
+	#bad_ids = anime[(anime.type!='TV') | (anime.rating.isnull())].anime_id.values
+	bad_ids = anime[(anime.type!='TV')].anime_id.values
 	users.drop(users[users.anime_id.map(lambda x: x in bad_ids)].index, inplace=True)
 	anime.drop(anime[(anime.type != 'TV') | (anime.rating.isnull())].index, inplace=True)
 	return users, anime
