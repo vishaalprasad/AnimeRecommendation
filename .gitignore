@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Data files
+*.csv
+
 # Distribution / packaging
 .Python
 env/
@@ -87,3 +90,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Cache
+cache/
+
+#Home
+~/
